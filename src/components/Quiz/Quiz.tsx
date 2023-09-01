@@ -14,18 +14,19 @@ const Quiz = () => {
 	const navigate = useNavigate();
 	const quizData = useStore((state: any) => state.quizData);
 	const setQuizData = useStore((state: any) => state.setQuizData);
-	const activeQuestionIndex = useStore(
-		(state: any) => state.activeQuestionIndex
-	);
-	const setActiveQuestionIndex = useStore(
-		(state: any) => state.setActiveQuestionIndex
-	);
-	const selectedAnswer = useStore((state: any) => state.selectedAnswer);
-	const setSelectedAnswer = useStore((state: any) => state.setSelectedAnswer);
+	const activeQuestion = useStore((state: any) => state.activeQuestion);
+	const setActiveQuestion = useStore((state: any) => state.setActiveQuestion);
 	const result = useStore((state: any) => state.result);
 	const setResult = useStore((state: any) => state.setResult);
+
 	const [isLoading, setIsLoading] = useState(false);
 	const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+	const totalquestion = quizData?.length;
+	const questionVisited =
+		Object.values(result).filter((item: any) => item.isVisited).length || 0;
+	const questionAttempted =
+		Object.values?.(result)?.filter((item: any) => item.ans)?.length || 0;
+	const unattemptedQuestion = totalquestion - +questionAttempted;
 
 	const getQuizData = () => {
 		setIsLoading(true);
@@ -33,12 +34,17 @@ const Quiz = () => {
 			.get("https://opentdb.com/api.php?amount=15")
 			.then((res) => {
 				let tempData = res?.data?.results;
-				tempData = tempData.map((item: any) => {
+				tempData = tempData.map((item: any, index: number) => {
+					item.id = index;
 					const options = [item.correct_answer, ...item.incorrect_answers];
 					shuffleArray(options);
+
 					return { ...item, options };
 				});
 				setQuizData(tempData);
+				tempData.map((item: any) => {
+					setResult(item.id, { ans: "", isVisited: false, ...item });
+				});
 				setIsLoading(false);
 			})
 			.catch((err) => {
@@ -46,56 +52,41 @@ const Quiz = () => {
 				setIsLoading(false);
 			});
 	};
+
 	useEffect(() => {
 		getQuizData();
 	}, []);
 
-	const prefilledAnswer = (id: number) => {
-		let index = result.findIndex((item: any) => item.id === id);
-		if (index != -1) {
-			setSelectedAnswer(result[index].answer);
-		} else {
-			setSelectedAnswer("");
-		}
+	console.log(result);
+
+	const handleResult = (id: number, selectedAnswer: string = "") => {
+		setResult(id, { ans: selectedAnswer, isVisited: true });
 	};
 
-	const getActiveQuestion = (index: number) => {
-		prefilledAnswer(index);
-		if (index < 15) {
-			setActiveQuestionIndex(index);
-		} else {
-			setActiveQuestionIndex(index - 1);
+	const handleQuesAction = (id: number, action: string) => {
+		switch (action) {
+			case "prev":
+				if (id > 0) {
+					setActiveQuestion(id - 1);
+				}
+				break;
+			case "next":
+				if (id < 14) {
+					setActiveQuestion(id + 1);
+				} else {
+					setShowConfirmationModal(true);
+				}
+				break;
+			default:
+				setActiveQuestion(id);
+				break;
 		}
+		handleResult(id, result[id]?.ans);
 	};
-	const handleNext = () => {
-		let tempData = {
-			id: activeQuestionIndex,
-			ques: quizData[activeQuestionIndex]?.["question"],
-			answer: selectedAnswer,
-			isAttempt: selectedAnswer ? true : false,
-			correctAnswer: quizData[activeQuestionIndex]?.["correct_answer"],
-		};
 
-		let index = result.findIndex((item: any) => item.id === tempData.id);
-		if (index != -1) {
-			result[index].answer = selectedAnswer;
-		} else {
-			setResult([...result, tempData]);
-		}
-		setSelectedAnswer("");
-		if (activeQuestionIndex === 14) {
-			setShowConfirmationModal(true);
-		} else {
-			getActiveQuestion(activeQuestionIndex + 1);
-		}
-	};
-	const handlePrev = () => {
-		getActiveQuestion(activeQuestionIndex - 1);
-	};
 	const handleSubmitAssignment = () => {
-		navigate("/report");
+		navigate("/report", { replace: true });
 	};
-
 	return (
 		<div className="quiz-container">
 			<Header title={"Quiz Exam"} />
@@ -104,42 +95,51 @@ const Quiz = () => {
 			) : (
 				<div className="quiz_wrapper">
 					<div style={{ flex: 1 }}>
-						<QuizItem item={quizData[activeQuestionIndex]} />
-						{activeQuestionIndex > 0 && (
+						<QuizItem
+							item={quizData[activeQuestion]}
+							handleResult={handleResult}
+						/>
+						{activeQuestion > 0 && (
 							<Button
 								btnTxt="Prev"
 								btnClass="prev_btn"
 								type={"submit"}
-								onClick={handlePrev}
+								onClick={() => handleQuesAction(activeQuestion, "prev")}
 							/>
 						)}
 						<Button
 							btnTxt="Next"
 							btnClass="next_btn"
 							type={"submit"}
-							onClick={handleNext}
+							onClick={() => handleQuesAction(activeQuestion, "next")}
 						/>
 					</div>
 					<div className="questions_nav">
 						<ul className="summary">
-							<li>Total:10 </li>
-							<li>Attempt:10 </li>
-							<li>Remaining:10 </li>
+							<li className="total">Total: {totalquestion} </li>
+							<li className="orange">Visited:{questionVisited} </li>
+							<li className="green">
+								<>Answered: {questionAttempted}</>
+							</li>
+							<li className="grey">Not-Answered:{unattemptedQuestion} </li>
 						</ul>
 						<div className="nav_inner">
-							{quizData?.map((item: any, index: number) => {
+							{quizData?.map((item: any) => {
 								return (
 									<span
-										onClick={() => getActiveQuestion(index)}
-										key={index}
+										onClick={() => handleQuesAction(item.id, "move")}
+										key={item.id}
 										className={
-											// result[index]?.isAttempt
-											// ? "attempt"
-											// :
-											index === activeQuestionIndex ? "visited" : ""
+											result[item.id]?.ans?.length
+												? "attempt"
+												: result[item.id]?.isVisited
+												? "visited"
+												: item.id === activeQuestion
+												? "active"
+												: ""
 										}
 									>
-										{index + 1}
+										{item.id + 1}
 									</span>
 								);
 							})}

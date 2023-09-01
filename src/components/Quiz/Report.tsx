@@ -1,11 +1,36 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import useStore from "../../store/useStore";
+import { removeLocalStorage } from "../../utils";
 import Header from "../global/Header";
 
 const Report = () => {
-	const getQuizReport = () => {};
+	const navigate = useNavigate();
 	const result = useStore((state: any) => state.result);
+	console.log(result);
+	useEffect(() => {
+		return () => {};
+	}, []);
+	const handlePageClose = () => {
+		removeLocalStorage("isLogin");
+		navigate("/");
+	};
+	window.addEventListener("beforeunload", handlePageClose);
 
+	window.addEventListener("popstate", handlePageClose);
+
+	// Clean up event listeners when the component unmounts
+
+	const totalquestion = Object.keys(result)?.length;
+	const correctAnswerCount = Object.values(result).filter(
+		(item: any) => item.ans === item.correct_answer
+	).length;
+	const notAnswerCount = Object.values(result).filter(
+		(item: any) => !item.ans
+	).length;
+	const inCorrectAnswerCount = Object.values(result).filter(
+		(item: any) => item.ans && item.ans != item.correct_answer
+	).length;
 	return (
 		<>
 			<Header title={" Score Card"} showTimer={false} />
@@ -13,16 +38,20 @@ const Report = () => {
 				<h3>Your quiz has been submitted</h3>
 				<div className="card">
 					<div className="col">
-						<span>15</span>
+						<span>{totalquestion}</span>
 						Total <br /> Questions
 					</div>
 					<div className="col">
-						<span style={{ background: "green" }}>10</span>
+						<span style={{ background: "green" }}>{correctAnswerCount}</span>
 						Correct <br /> Answers
 					</div>
 					<div className="col">
-						<span style={{ background: "red" }}>10</span>
+						<span style={{ background: "red" }}>{inCorrectAnswerCount}</span>
 						Wrong <br /> Answers
+					</div>
+					<div className="col">
+						<span style={{ background: "grey" }}>{notAnswerCount}</span>
+						Not <br /> Answers
 					</div>
 				</div>
 
@@ -33,23 +62,23 @@ const Report = () => {
 						<th>Your Response</th>
 						<th>Correct Answer</th>
 					</tr>
-					{result.map((item: any, index: number) => {
+					{Object.values(result).map((item: any) => {
 						return (
-							<tr key={index}>
-								<td>{index + 1}</td>
-								<td align="center">{item?.ques}</td>
+							<tr key={item.id}>
+								<td>{item.id + 1}</td>
+								<td align="center">{item?.question}</td>
 								<td
 									className={
-										item.answer
-											? item.answer === item.correctAnswer
+										item.ans
+											? item.ans === item.correct_answer
 												? "correct"
 												: "incorrect"
 											: "not_attempt"
 									}
 								>
-									{item?.answer || "Not Attempted"}
+									{item?.ans || "Not Attempted"}
 								</td>
-								<td>{item?.correctAnswer}</td>
+								<td>{item?.correct_answer}</td>
 							</tr>
 						);
 					})}

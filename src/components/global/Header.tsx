@@ -16,7 +16,7 @@ const Header = (props: HeaderProps) => {
 
 			return () => clearInterval(timerInterval);
 		} else if (timeLeft === 0) {
-			navigate("/report");
+			navigate("/report", { replace: true });
 		}
 	}, [timeLeft]);
 	return (

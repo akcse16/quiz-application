@@ -1,3 +1,4 @@
+import { object } from "yup";
 import { create } from "zustand";
 
 const useStore = create((set) => ({
@@ -7,16 +8,20 @@ const useStore = create((set) => ({
 			quizData: quizData,
 		}));
 	},
-	result: [],
-	setResult: (result: []) => {
+	result: {},
+	setResult: (id: number, params: {}) => {
 		set((state: any) => ({
-			result: result,
+			result: {
+				...state.result,
+				[id]: { ...state.result[id], ...params },
+			},
 		}));
 	},
-	activeQuestionIndex: 0,
-	setActiveQuestionIndex: (activeQuestionIndex: number) => {
+
+	activeQuestion: 0,
+	setActiveQuestion: (activeQuestion: number) => {
 		set((state: any) => ({
-			activeQuestionIndex: activeQuestionIndex,
+			activeQuestion: activeQuestion,
 		}));
 	},
 	selectedAnswer: "",

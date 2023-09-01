@@ -2,22 +2,30 @@ import React from "react";
 import useStore from "../../store/useStore";
 interface QuizItemProps {
 	item: any;
-	// setSelectedAnswer?: any;
-	// selectedAnswer?: string;
-	// activeQuestionIndex: number;
+	handleResult: (activeQuestion: number, value: string) => void;
 }
 const QuizItem = (props: QuizItemProps) => {
-	const { item } = props;
-	const activeQuestionIndex = useStore(
-		(state: any) => state.activeQuestionIndex
-	);
-	const selectedAnswer = useStore((state: any) => state.selectedAnswer);
-	const setSelectedAnswer = useStore((state: any) => state.setSelectedAnswer);
+	const { item, handleResult } = props;
+	const activeQuestion = useStore((state: any) => state.activeQuestion);
+	const result = useStore((state: any) => state.result);
 
 	return (
 		<>
+			<div className="question_header">
+				<span className="question_no">
+					<b>Question no: </b>
+					{activeQuestion + 1}
+				</span>
+				<div className="right">
+					<span>
+						<b>category: </b> {item?.category}
+					</span>
+					<span>
+						<b>Difficulty Level: </b> {item?.difficulty}
+					</span>
+				</div>
+			</div>
 			<div className="quiz_item">
-				<span className="question_no">{activeQuestionIndex + 1}</span>
 				<div>
 					<div className="ques">{item?.question}</div>
 					<ul className="options">
@@ -25,12 +33,12 @@ const QuizItem = (props: QuizItemProps) => {
 							return (
 								<li
 									className={
-										selectedAnswer === value
+										result[activeQuestion]?.ans === value
 											? "option_inner active"
 											: "option_inner"
 									}
 									key={index}
-									onClick={() => setSelectedAnswer(value)}
+									onClick={() => handleResult(activeQuestion, value)}
 								>
 									{value}
 								</li>

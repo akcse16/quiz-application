@@ -96,10 +96,15 @@ body {
     display: flex;
     align-items: center;
     color: #25272d;
-
     margin-bottom: 20px;
   }
 
+  .danger {
+    color: red;
+    margin-top: -10px;
+    font-size: 12px;
+    padding-bottom: 10px;
+  }
 
 }
 
@@ -108,6 +113,23 @@ body {
   padding: 50px 30px;
   align-items: flex-start;
   position: relative;
+
+  .question_header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    gap: 10px;
+    flex-wrap: wrap;
+    font-size: 14px;
+
+    .right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+  }
 
   @media (max-width:767px) {
     padding: 50px 10px;
@@ -118,7 +140,7 @@ body {
   .quiz_item {
     flex: 1;
     border-right: 1px solid #ddd;
-    min-height: calc(100vh - 182px);
+    min-height: calc(100vh - 250px);
     display: flex;
     align-items: flex-start;
 
@@ -204,14 +226,38 @@ body {
       font-size: 14px;
       list-style: none;
       padding-bottom: 10px;
-      flex-wrap: wrap;
+      // flex-wrap: wrap;
+      flex-direction: column;
       gap: 10px;
       display: flex;
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 20px;
 
       li {
         font-weight: 700;
         font-size: 13px;
         line-height: 1.3;
+        padding: 8px 5px;
+        border-radius: 6px;
+
+        &.green {
+          background: green;
+          color: #fff;
+        }
+
+        &.orange {
+          background: orange;
+        }
+
+        &.total {
+          background: #0387cd;
+          color: #fff;
+        }
+
+        &.grey {
+          background: grey;
+          color: #fff;
+        }
       }
     }
 
@@ -233,6 +279,12 @@ body {
 
         &.visited {
           background: orange;
+          border: 1px transparent;
+        }
+
+        &.active {
+          background: #0387cd;
+          color: #fff;
           border: 1px transparent;
         }
 
@@ -271,7 +323,8 @@ body {
     background: #fff;
     border-radius: 10px;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
 
     .col {
       text-align: center;
