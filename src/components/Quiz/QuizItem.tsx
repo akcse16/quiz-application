@@ -5,6 +5,7 @@ interface QuizItemProps {
 	handleResult: (activeQuestion: number, value: string) => void;
 }
 const QuizItem = (props: QuizItemProps) => {
+	
 	const { item, handleResult } = props;
 	const activeQuestion = useStore((state: any) => state.activeQuestion);
 	const result = useStore((state: any) => state.result);
@@ -14,11 +15,11 @@ const QuizItem = (props: QuizItemProps) => {
 			<div className="question_header">
 				<span className="question_no">
 					<b>Question no: </b>
-					{activeQuestion + 1}
+					{activeQuestion}
 				</span>
 				<div className="right">
 					<span>
-						<b>category: </b> {item?.category}
+						<b>Category: </b> {item?.category}
 					</span>
 					<span>
 						<b>Difficulty Level: </b> {item?.difficulty}

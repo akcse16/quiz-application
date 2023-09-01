@@ -98,6 +98,9 @@ body {
     color: #25272d;
     margin-bottom: 20px;
   }
+  .invalid{
+    border-color: red;
+  }
 
   .danger {
     color: red;
@@ -288,7 +291,7 @@ body {
           border: 1px transparent;
         }
 
-        &.attempt {
+        &.attempted {
           background: green;
           color: #fff;
           border: 1px transparent;

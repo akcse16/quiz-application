@@ -1,13 +1,16 @@
 import { toast, TypeOptions } from "react-toastify";
-
-export const getItemFromStore = (key: string) => {
-	const storedData = window.localStorage.getItem(key);
+/**
+ * Store Management
+ * @param key
+ * @param store
+ */
+export const getItemFromStore = (key: string, store = localStorage) => {
+	const storedData = store.getItem(key);
 	return storedData ? JSON.parse(storedData) : null;
 };
-export const setLocalStorage = (key: string, value: any) =>
-	window.localStorage.setItem(key, JSON.stringify(value));
-export const removeLocalStorage = (key: string) =>
-	window.localStorage.removeItem(key);
+export const setItemToStore = (key:string, payload:any, store = localStorage) => store.setItem(key, JSON.stringify(payload));
+export const removeItemFromStore = (key:string, store = localStorage) => store.removeItem(key);
+
 
 export const showToast = (
 	message: string | any,
@@ -29,4 +32,3 @@ export const EmailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 export const shuffleArray = (item: any) => {
 	return item.sort(() => 0.5 - Math.random());
 };
-// export const isUserAuthenticated = () => getLocalStorage("isLogin");

@@ -3,7 +3,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import { getItemFromStore } from "../utils";
 
 const PrivateRoutes = () => {
-	const isAuthenticated = getItemFromStore("isLogin") ? true : false;
+	const isAuthenticated = getItemFromStore("userData") ? true : false;
 	return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
 };
 

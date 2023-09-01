@@ -1,4 +1,3 @@
-import { object } from "yup";
 import { create } from "zustand";
 
 const useStore = create((set) => ({
@@ -18,7 +17,7 @@ const useStore = create((set) => ({
 		}));
 	},
 
-	activeQuestion: 0,
+	activeQuestion: 1,
 	setActiveQuestion: (activeQuestion: number) => {
 		set((state: any) => ({
 			activeQuestion: activeQuestion,

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 interface HeaderProps {
 	title: string;
@@ -8,6 +8,7 @@ const Header = (props: HeaderProps) => {
 	const { title, showTimer = true } = props;
 	const [timeLeft, setTimeLeft] = useState(30 * 60);
 	const navigate = useNavigate();
+	
 	useEffect(() => {
 		if (timeLeft > 0) {
 			const timerInterval = setInterval(() => {
@@ -18,7 +19,8 @@ const Header = (props: HeaderProps) => {
 		} else if (timeLeft === 0) {
 			navigate("/report", { replace: true });
 		}
-	}, [timeLeft]);
+	}, [timeLeft, navigate]);
+
 	return (
 		<div className="header">
 			<img src="/images/josh-logo.svg" alt="" />
