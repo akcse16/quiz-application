@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { showAlert } from "../../utils";
 interface HeaderProps {
 	title: string;
 	showTimer?: boolean;
@@ -21,13 +22,6 @@ const Header = (props: HeaderProps) => {
 		}
 	}, [timeLeft, navigate]);
 
-	// Function to show an alert
-	const showAlert = () => {
-		window.alert(
-			"Are you sure you want to leave this page? You will be logged out and your data will be lost"
-		);
-	};
-
 	// Add event listeners to detect the refresh action
 	useEffect(() => {
 		const handleBeforeUnload = (event: any) => {
@@ -37,7 +31,6 @@ const Header = (props: HeaderProps) => {
 			event.returnValue = "Are you sure you want to leave this page?";
 			localStorage.clear();
 		};
-
 		const handleKeyDown = (event: any) => {
 			// Detect Ctrl + R (or Command + R on Mac) keyboard shortcut
 			if ((event.ctrlKey || event.metaKey) && event.key === "r") {

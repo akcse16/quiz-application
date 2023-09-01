@@ -95,7 +95,7 @@ const Quiz = () => {
 				id > 1 && setActiveQuestion(id - 1);
 				break;
 			case "next":
-				id < quizData.length - 1
+				id < quizData.length
 					? setActiveQuestion(id + 1)
 					: setShowConfirmationModal(true);
 				break;
