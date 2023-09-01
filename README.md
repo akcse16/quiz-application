@@ -15,34 +15,30 @@ JOSH Talks | React | Quiz
 
 
 ## Application overview
+<p>  In this application, I have structured the codebase into modular components to facilitate easy debugging and code maintenance. Here's an overview of the key components and their roles:</p>
 <ul>
  <li>
-  In this application, I have structured the codebase into modular components to facilitate easy debugging and code maintenance. Here's an overview of the key components and their roles:
- </li>
- <li>
-StartPage: This component handles the user's email submission, capturing their input.
+<b>StartPage:</b> This component handles the user's email submission, capturing their input.
 </li>
   <li>
-Quiz: This component manages the quiz interface, including the timer countdown. It is responsible for displaying and navigating between the 15 questions.
+<b>Quiz:</b> This component manages the quiz interface, including the timer countdown. It is responsible for displaying and navigating between the 15 questions.
 </li>
  <li>
-Question: A reusable component that renders individual quiz questions. It receives question data and user responses as props.
+<b>Question:</b> A reusable component that renders individual quiz questions. It receives question data and user responses as props.
  </li>
  <li>
-Timer: A standalone component that displays and manages the countdown timer. It triggers auto-submission when the timer reaches zero.
+<b>Timer:</b> A standalone component that displays and manages the countdown timer. It triggers auto-submission when the timer reaches zero.
  </li>
  <li>
-
-ReportPage: This component is responsible for generating and displaying the quiz report, including the user's answers and correct answers side by side.
+<b>ReportPage:</b> This component is responsible for generating and displaying the quiz report, including the user's answers and correct answers side by side.
 </li>
  <li>
-DataStore: A store or context provider that manages data across the application. It ensures efficient data access and sharing between components, such as storing user responses and question details.
- </li>
-  <li>
-By using clear and consistent naming conventions for components and maintaining a dedicated data store for managing application data, the codebase is well-organized and easily maintainable. These practices enhance code reusability, optimize performance, and simplify debugging during development and testing.
+<b>DataStore:</b> A store or context provider that manages data across the application. It ensures efficient data access and sharing between components, such as storing user responses and question details.
  </li>
 </ul>
-# Quickstart install
+<p>By using clear and consistent naming conventions for components and maintaining a dedicated data store for managing application data, the codebase is well-organized and easily maintainable. These practices enhance code reusability, optimize performance, and simplify debugging during development and testing.</p>
+
+## Quickstart install
 
 ## Prerequisites
 
