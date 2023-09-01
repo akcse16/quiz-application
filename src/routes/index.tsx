@@ -1,8 +1,8 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Login from "../components/Login";
-import Quiz from "../components/Quiz";
-import Report from "../components/Report";
+import Quiz from "../components/Quiz/Quiz";
+import Report from "../components/Quiz/Report";
 import PrivateRoutes from "./PrivateRoutes";
 
 const RouteStack = () => {

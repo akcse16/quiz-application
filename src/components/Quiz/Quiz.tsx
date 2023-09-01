@@ -1,14 +1,15 @@
 import React, { Fragment, useEffect, useState } from "react";
-import Button from "./global/Button";
+import Button from "../global/Button";
 import axios from "axios";
 import QuizItem from "./QuizItem";
 
-import Loader from "./global/Loader";
-import useStore from "../store/useStore";
+import Loader from "../global/Loader";
+import useStore from "../../store/useStore";
 import { useNavigate } from "react-router-dom";
 
-import ConfirmationModal from "./global/ConfirmationModal";
-import { shuffleArray } from "../utils";
+import ConfirmationModal from "../global/ConfirmationModal";
+import { shuffleArray } from "../../utils";
+import Header from "../global/Header";
 const Quiz = () => {
 	const navigate = useNavigate();
 	const quizData = useStore((state: any) => state.quizData);
@@ -25,7 +26,6 @@ const Quiz = () => {
 	const setResult = useStore((state: any) => state.setResult);
 	const [isLoading, setIsLoading] = useState(false);
 	const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-	const [timeLeft, setTimeLeft] = useState(30 * 60);
 
 	const getQuizData = () => {
 		setIsLoading(true);
@@ -49,18 +49,6 @@ const Quiz = () => {
 	useEffect(() => {
 		getQuizData();
 	}, []);
-
-	useEffect(() => {
-		if (timeLeft > 0) {
-			const timerInterval = setInterval(() => {
-				setTimeLeft((prevTime) => prevTime - 1);
-			}, 1000);
-
-			return () => clearInterval(timerInterval);
-		} else if (timeLeft === 0) {
-			handleSubmitAssignment();
-		}
-	}, [timeLeft]);
 
 	const prefilledAnswer = (id: number) => {
 		let index = result.findIndex((item: any) => item.id === id);
@@ -110,6 +98,7 @@ const Quiz = () => {
 
 	return (
 		<div className="quiz-container">
+			<Header title={"Quiz Exam"} />
 			{isLoading ? (
 				<Loader />
 			) : (
@@ -124,7 +113,6 @@ const Quiz = () => {
 								onClick={handlePrev}
 							/>
 						)}
-
 						<Button
 							btnTxt="Next"
 							btnClass="next_btn"
@@ -133,25 +121,29 @@ const Quiz = () => {
 						/>
 					</div>
 					<div className="questions_nav">
-						<span className="timer">
-							Time Left: {Math.floor(timeLeft / 60)} min {timeLeft % 60} sec
-						</span>
-						{quizData?.map((item: any, index: number) => {
-							return (
-								<span
-									onClick={() => getActiveQuestion(index)}
-									key={index}
-									className={
-										// result[index]?.isAttempt
-										// ? "attempt"
-										// :
-										index === activeQuestionIndex ? "visited" : ""
-									}
-								>
-									{index + 1}
-								</span>
-							);
-						})}
+						<ul className="summary">
+							<li>Total:10 </li>
+							<li>Attempt:10 </li>
+							<li>Remaining:10 </li>
+						</ul>
+						<div className="nav_inner">
+							{quizData?.map((item: any, index: number) => {
+								return (
+									<span
+										onClick={() => getActiveQuestion(index)}
+										key={index}
+										className={
+											// result[index]?.isAttempt
+											// ? "attempt"
+											// :
+											index === activeQuestionIndex ? "visited" : ""
+										}
+									>
+										{index + 1}
+									</span>
+								);
+							})}
+						</div>
 					</div>
 				</div>
 			)}
