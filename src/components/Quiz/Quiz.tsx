@@ -114,14 +114,6 @@ const Quiz = () => {
 		navigate("/report", { replace: true });
 	};
 
-	/* In this case, the
-  `useEffect` hook is used to update the result for the active question whenever the `activeQuestion`
-  value changes. */
-	useEffect(() => {
-		handleResult(activeQuestion, "");
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [activeQuestion]);
-
 	const isLastQuestion = activeQuestion === quizData.length;
 
 	return (
